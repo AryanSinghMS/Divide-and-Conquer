@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Sort Algorithm</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Custom styles for aesthetic polish and essential overrides */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+            /* Essential for fixed navbar not covering anchors */
+            scroll-padding-top: 4rem; 
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Custom gradient for titles */
+        .text-gradient {
+            background-image: linear-gradient(to right, #6366f1, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Custom shadow and hover effect for cards */
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .card-shadow:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Style for active navigation link */
+        .nav-active {
+            background-color: #4f46e5; /* Indigo 600 */
+            color: white;
+        }
+        /* Custom list style for new sections */
+        .content-list {
+            list-style-type: disc;
+            padding-left: 1.5rem; /* Equivalent to pl-6 */
+        }
+        .content-list li {
+            margin-bottom: 0.5rem; /* Equivalent to mb-2 */
+        }
+
+    </style>
+</head>
+<body id="top" class="min-h-screen p-4 sm:p-8 bg-gray-50">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-10 bg-gray-900 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16">
+            <!-- Logo/Title -->
+            <div class="flex items-center">
+                <a href="index.html" class="text-white text-xl font-bold rounded-md p-2 hover:bg-gray-700 transition duration-150">D&C Paradigm</a>
+            </div>
+            <!-- Nav Links -->
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Home</a>
+                <a href="#top" class="nav-active px-3 py-2 rounded-md text-sm font-medium transition duration-150">Merge Sort</a>
+                <a href="quick-sort.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Quick Sort</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Header Section -->
+    <header class="text-center mb-12 mt-16">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight">
+            <span class="text-gradient">Merge Sort:</span> The Stable D&C Algorithm
+        </h1>
+        <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+            
+        </p>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto">
+
+        <!-- Introduction Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-indigo-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2.5-2 4-2"></path><path d="M4 12s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2.5-2 4-2"></path><path d="M4 7s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2.5-2 4-2"></path></svg>
+                Overview and Stability
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                Merge Sort is a highly efficient, comparison-based sorting algorithm that strictly follows the Divide and Conquer strategy. Unlike Quick Sort, its worst-case, average-case, and best-case time complexities are all O(n \log n), making its performance highly predictable. Furthermore, Merge Sort is considered a stable sort, meaning that two elements with equal values maintain their relative order in the sorted output.
+            </p>
+        </section>
+        
+        <!-- New Section: Recursive Flow and Base Case -->
+        <section class="mb-16 p-6 md:p-10 bg-indigo-50 rounded-xl shadow-lg border-t-4 border-indigo-300">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.71 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                The Recursive Flow and Base Case
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                The essence of Merge Sort lies in its recursion. The algorithm is continually called on smaller and smaller halves of the input array. This division process doesn't stop arbitrarily; it must have a base case to terminate. The base case is reached when the sub-array size becomes 1 . A list containing only one element is, by definition, sorted and requires no further processing. Once this base is hit, the function returns, and the crucial Combine phase begins to rebuild the sorted array from the bottom up.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                The total work done by Merge Sort can be visualized as a binary tree, where the Divide phase moves down the tree, and the Combine phase moves back up. The height of this tree is \log_2 n, which explains the \log n factor in the complexity.
+            </p>
+        </section>
+
+        <!-- The D&C Steps in Merge Sort -->
+        <section id="algorithm-steps" class="mb-16">
+            <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">
+                The Merge Sort Process
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Step 1: Divide -->
+                <div class="step-card card-shadow bg-white rounded-xl p-8 border-t-4 border-blue-500">
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">1. Divide</h3>
+                    <p class="text-gray-600">
+                        The unsorted list is split into two halves (sub-arrays) in the middle. This process is applied recursively to the two sub-arrays until each sub-array contains only one element. A single-element list is inherently sorted, forming the base case for the recursion.
+                    </p>
+                </div>
+
+                <!-- Step 2: Combine (The Merge Operation) -->
+                <div id="merge-operation" class="step-card card-shadow bg-white rounded-xl p-8 border-t-4 border-red-500">
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">2. Combine (Merge)</h3>
+                    <p class="text-gray-600">
+                        This is the most critical step. The two sorted sub-arrays are merged back into a single sorted array. It compares the smallest remaining element of each sub-array, taking the smaller one and placing it into the final array, until one sub-array is empty. The remaining elements from the non-empty sub-array are then appended.
+                    </p>
+                </div>
+            </div>
+            
+        </section>
+
+        <!-- Video Demonstration: Merge Sort Process -->
+        <section class="mb-16 p-6 md:p-10 bg-gray-800 rounded-xl shadow-lg text-white">
+            <div class="section-title-wrapper">
+                <h2 class="text-3xl font-bold mb-6 text-yellow-400 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    Visualizing Merge Sort
+                </h2>
+            </div>
+            <p class="text-lg text-gray-300 mb-6 leading-relaxed">
+                Watch the complete demonstration of the Merge Sort process, including the recursive division and the final merging steps, to understand the O(n \log n) efficiency visually.
+            </p>
+            <div class="flex justify-center">
+                <video controls preload="metadata" class="rounded-xl shadow-2xl max-w-full h-auto border-4 border-yellow-400" style="max-height: 500px;">
+                    <source src="vid/Presentation1.mp4" type="video/mp4">
+                    
+                </video>
+            </div>
+        </section>
+        <!-- Advantages Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-green-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path></svg>
+                Advantages of Merge Sort
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li><b>Stability : </b></li>
+                        <dl>Merge sort is a stable sorting algorithm, which means it maintains the relative order of equal elements in the input array.</dl>
+                    
+                    <li><b>Guaranteed worst-case performance: </b></li>
+                        <dl>Merge sort has a worst-case time complexity of O(N logN) , which means it performs well even on large datasets.</dl>
+                    
+                    <li><b>Simple to implement: </b></li>
+                        <dl>The divide-and-conquer approach is straightforward.</dl>
+                    
+                    <li><b>Naturally Parallel : </b></li>
+                        <dl>We independently merge subarrays that makes it suitable for parallel processing.</dl> 
+            </ul>
+        </section>
+
+        <!-- Disadvantages Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-yellow-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                Disadvantages of Merge Sort
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li><b>Space complexity:</b></li>
+                        <dl>Merge sort requires additional memory to store the merged sub-arrays during the sorting process.</dl>
+                    
+                    <li><b>Not in-place:</b></li>
+                        <dl>Merge sort is not an in-place sorting algorithm, which means it requires additional memory to store the sorted data. This can be a disadvantage in applications where memory usage is a concern.
+                    <li>Merge Sort is Slower than QuickSort in general as QuickSort is more cache friendly because it works in-place.
+                    </li></ul>
+        </section>
+        
+        <!-- Applications Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-blue-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"></path><path d="M8 16h.01"></path><path d="M12 12h.01"></path><path d="M16 16h.01"></path><path d="M12 8h.01"></path><path d="M12 20h.01"></path></svg>
+                Applications of Merge Sort
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li>External sorting (when the dataset is too large to fit in memory)</li>
+                <li>Used to solve problems like Inversion counting, Count Smaller on Right & Surpasser Count</li>
+                <li>Merge Sort and its variations are used in library methods of programming languages. Its variation TimSort is used in Python, Java Android and Swift. The main reason why it is preferred to sort non-primitive types is stability which is not there in QuickSort. Arrays.sort in Java uses QuickSort while Collections.sort uses MergeSort.</li>
+                <li>It is a preferred algorithm for sorting Linked lists.</li>
+                <li>It can be easily parallelized as we can independently sort subarrays and then merge.
+                <li>The merge function of merge sort to efficiently solve the problems like union and intersection of two sorted arrays.</li>                
+                
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center mt-12 py-4 border-t border-gray-200 text-gray-500">
+        <p>Algorithm Analysis & Design | Divide and Conquer Paradigm</p>
+    </footer>
+
+</body>
+</html>

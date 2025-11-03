@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divide and Conquer Paradigm</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for aesthetic polish */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+            /* IMPORTANT FIX: Adds 4rem offset for all anchor links, so fixed nav doesn't cover titles */
+            scroll-padding-top: 4rem; 
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc; /* Light gray background */
+        }
+        .text-gradient {
+            background-image: linear-gradient(to right, #6366f1, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .card-shadow:hover {
+            transform: translateY(-5px);
+        }
+        /* Custom list style for new sections */
+        .content-list {
+            list-style-type: disc;
+            padding-left: 1.5rem; /* Equivalent to pl-6 */
+        }
+        .content-list li {
+            margin-bottom: 0.5rem; /* Equivalent to mb-2 */
+        }
+       
+
+    </style>
+</head>
+<body id="top" class="min-h-screen p-4 sm:p-8 bg-gray-50">
+
+    <!-- Navigation Bar (fixed - z-10 ensures it is always on top) --><nav class="fixed top-0 left-0 right-0 z-10 bg-gray-900 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo/Title --><div class="flex items-center">
+                    <a href="#top" class="text-white text-xl font-bold rounded-md p-2 hover:bg-gray-700 transition duration-150">D&C Paradigm</a>
+                </div>
+                <!-- Nav Links --><div class="flex items-center space-x-2 sm:space-x-4">
+                    <a href="#top" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Home</a>
+                    <a href="#tri-phase" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Tri Phase</a>
+                    <a href="merge-sort.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Merge Sort</a>
+                    <a href="quick-sort.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Quick Sort</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Header Section - ADDED mt-16 to push content down past the fixed navbar on initial load --><header class="text-center mb-12 mt-16">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight">
+            The <span class="text-gradient">Divide and Conquer</span> Strategy
+        </h1>
+        <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+            A powerful algorithmic paradigm for solving complex problems efficiently.
+        </p>
+    </header>
+
+    <!-- Main Content Container --><main class="max-w-6xl mx-auto">
+
+        <!-- Image Section --><section class="mb-16 flex justify-center">
+            <img 
+                src="image/Introduction-to-Divide-and-Conquer-Algorithm-(1).png" 
+                alt="Divide and Conquer Algorithm Illustration" 
+                class="rounded-lg shadow-xl max-w-full h-auto"
+                style="max-height: 500px; width: auto;"
+            >
+        </section>
+
+        <!-- Introduction Section --><section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg border-l-4 border-indigo-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 12H8"></path><path d="M12 8v8"></path></svg>
+                What is Divide and Conquer?
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                Divide and Conquer Algorithm is a problem-solving technique used to solve problems by dividing the main problem into subproblems, solving them individually and then merging them to find solution to the original problem. Divide and Conquer is mainly useful when we divide a problem into independent subproblems.
+                The Divide and Conquer (D&C) is a core concept in computer science. It works by breaking down a large, difficult problem into smaller, easier-to-solve subproblems. These subproblems are solved independently, and their solutions are then combined to form the final solution to the original problem. This recursive nature often leads to highly efficient and faster algorithms.
+            </p>
+        </section>
+
+        <!-- The Three Steps Section (Anchor target) --><section id="tri-phase" class="mb-16">
+            <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">
+                The Three Phases of D&C
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Step 1: Divide --><div class="bg-white p-8 rounded-xl card-shadow border-t-4 border-blue-500">
+                    <div class="text-blue-500 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 5.5v11L12 22 2 17.5v-11L12 2z"></path><path d="M12 11.5v5"></path><path d="M22 7l-10 5.5-10-5.5"></path><path d="M2 17.5l10-5.5 10 5.5"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">1. Divide</h3>
+                    <p class="text-gray-600">
+                        The original problem is broken down into a set of non-overlapping subproblems that are smaller instances of the original problem. This splitting continues recursively until the subproblems are small enough to be solved directly (the base case).
+                    </p>
+                </div>
+
+                <!-- Step 2: Conquer --><div class="bg-white p-8 rounded-xl card-shadow border-t-4 border-green-500">
+                    <div class="text-green-500 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.92 14.5a.5.5 0 0 0-.2.43 1.94 1.94 0 0 1-1.35 1.76l-6.84 2.89a2 2 0 0 1-1.26 0L4.63 16.7A2 2 0 0 1 3.3 14.94a.5.5 0 0 0-.2-.44V6.99a.5.5 0 0 0 .2-.43A1.94 1.94 0 0 1 4.65 4.8l6.84-2.89a2 2 0 0 1 1.26 0l6.84 2.89a2 2 0 0 1 1.33 1.76v7.51z"></path><path d="M12 15l-3 3-1-1"></path><path d="M13 14h6"></path><path d="M15 12V6"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">2. Conquer</h3>
+                    <p class="text-gray-600">
+                        The subproblems are solved. If the subproblem is small enough (the base case), it is solved in a straightforward, non-recursive manner. Otherwise, the problem is recursively divided further.
+                    </p>
+                </div>
+
+                <!-- Step 3: Combine --><div class="bg-white p-8 rounded-xl card-shadow border-t-4 border-red-500">
+                    <div class="text-red-500 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">3. Combine</h3>
+                    <p class="text-gray-600">
+                        The solutions of the subproblems are merged or combined to create the final solution for the original, large problem. This phase is often the most critical for efficiency.
+                    </p>
+                </div>
+
+            </div>
+            
+            <!-- Visual Flow Arrow (For Desktop/Tablet) --><div class="hidden md:flex justify-around mt-6 relative z-0">
+                <!-- Arrow 1 (Divide -> Conquer) --><div class="absolute top-[-100px] left-[20%] w-[10%] text-gray-400 text-6xl transform rotate-45">
+                    &#8594;
+                </div>
+                <!-- Arrow 2 (Conquer -> Combine) --><div class="absolute top-[-100px] right-[20%] w-[10%] text-gray-400 text-6xl transform -rotate-45">
+                    &#8594;
+                </div>
+            </div>
+            
+        </section>
+
+        <!-- Examples Section --><section class="mb-16 p-6 md:p-10 bg-gray-800 rounded-xl text-white">
+            <h2 class="text-3xl font-bold mb-6 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 17v-4"></path><path d="M14 15h-4"></path></svg>
+                Classic Examples & Benefits
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Merge Sort (Anchor target) --><div id="merge-sort" class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-2 text-yellow-400">Merge Sort</h3>
+                    <p class="text-gray-300">
+                        A sorting algorithm where the array is repeatedly divided into two halves until a list of one element is reached (Divide). The smaller lists are then merged back together in sorted order (Combine).
+                    </p>
+                    <code class="block mt-3 bg-gray-600 p-2 rounded text-sm text-green-300">
+                        Time Complexity: O(n \log n)
+                    </code>
+                </div>
+
+                <!-- Quick Sort (Anchor target) --><div id="quick-sort" class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-2 text-yellow-400">Quick Sort</h3>
+                    <p class="text-gray-300">
+                        The algorithm selects a 'pivot' element and partitions the other elements into two sub-arrays, according to whether they are less than or greater than the pivot (Divide). The sub-arrays are then sorted recursively (Conquer).
+                    </p>
+                    <code class="block mt-3 bg-gray-600 p-2 rounded text-sm text-green-300">
+                        Average Time Complexity: O(n \log n)
+                    </code>
+                </div>
+            </div>
+
+            <p class="mt-6 text-lg text-gray-300">
+                <b>Key Benefits:</b> This approach is also crucial for algorithms like the fast Fourier transform (FFT) and matrix multiplication, demonstrating superior performance compared to simple iterative solutions.
+            </p>
+        </section>
+        <!-- Advantages Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-green-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path></svg>
+                Advantages of Divide and Conquer
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li><b>Solving difficult problems:</b></li>
+                    <dl>Divide and conquer technique is a tool for solving difficult problems conceptually. e.g. Tower of Hanoi puzzle. It requires a way of breaking the problem into sub-problems, and solving all of them as an individual cases and then combining sub- problems to the original problem.</dl>
+                    <li><b>Algorithm efficiency:</b></li>
+                    <dl>The divide-and-conquer algorithm often helps in the discovery of efficient algorithms. It is the key to algorithms like Quick Sort and Merge Sort, and fast Fourier transforms.</dl>
+                    <li><b>Parallelism:</b></li>
+                    <dl>Normally Divide and Conquer algorithms are used in multi-processor machines having shared-memory systems where the communication of data between processors does not need to be planned in advance, because distinct sub-problems can be executed on different processors.</dl>
+                    <li><b>Memory access:</b></li>
+                    <dl>These algorithms naturally make an efficient use of memory caches. Since the subproblems are small enough to be solved in cache without using the main memory that is slower one. Any algorithm that uses cache efficiently is called cache oblivious.</dl>
+                
+            </ul>
+        </section>
+
+        <!-- Disadvantages Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-yellow-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                Disadvantages of Divide and Conquer
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li><b>Overhead: </b></li>
+                        <dl>The process of dividing the problem into subproblems and then combining the solutions can require additional time and resources. This overhead can be significant for problems that are already relatively small or that have a simple solution.</dl>
+                    
+                    <li><b>Complexity: </b></li>
+                        <dl>Dividing a problem into smaller subproblems can increase the complexity of the overall solution. This is particularly true when the subproblems are interdependent and must be solved in a specific order.</dl>
+                    
+                    <li><b>Difficulty of implementation:</b></li>
+                        <dl>Some problems are difficult to divide into smaller subproblems or require a complex algorithm to do so. In these cases, it can be challenging to implement a divide and conquer solution.</dl>
+                    
+                    <li><b>Memory limitations:</b></li>
+                        <dl>When working with large data sets, the memory requirements for storing the intermediate results of the subproblems can become a limiting factor.</dl>
+                    </ul>
+        </section>
+        
+        
+
+    </main>
+
+    <!-- Footer --><footer class="text-center mt-12 py-4 border-t border-gray-200 text-gray-500">
+        <p>Algorithm Analysis & Design | Divide and Conquer Paradigm</p>
+    </footer>
+
+</body>
+</html>

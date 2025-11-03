@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Sort Algorithm</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Bootstrap CSS & JS for Carousel -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <style>
+        /* Custom styles for aesthetic polish and essential overrides */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+            /* Essential for fixed navbar not covering anchors */
+            scroll-padding-top: 4rem; 
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Custom gradient for titles */
+        .text-gradient {
+            background-image: linear-gradient(to right, #f97316, #ef4444); /* Orange/Red gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Custom shadow and hover effect for cards */
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .card-shadow:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Style for active navigation link */
+        .nav-active {
+            background-color: #ef4444; /* Red 500 */
+            color: white;
+        }
+        
+        /* Bootstrap Carousel Overrides */
+        .carousel-caption {
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        .carousel-control-next-icon,
+        .carousel-control-prev-icon {
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 50%;
+            padding: 1.5rem;
+        }
+        
+        /* Custom list style for new sections */
+        .content-list {
+            list-style-type: disc;
+            padding-left: 1.5rem; /* Equivalent to pl-6 */
+        }
+        .content-list li {
+            margin-bottom: 0.5rem; /* Equivalent to mb-2 */
+        }
+        
+    </style>
+</head>
+<body id="top" class="min-h-screen p-4 sm:p-8 bg-gray-50">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-10 bg-gray-900 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16">
+            <!-- Logo/Title -->
+            <div class="flex items-center">
+                <a href="index.html" class="text-white text-xl font-bold rounded-md p-2 hover:bg-gray-700 transition duration-150">D&C Paradigm</a>
+            </div>
+            <!-- Nav Links -->
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Home</a>
+                <a href="merge-sort.html" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150">Merge Sort</a>
+                <a href="#top" class="nav-active px-3 py-2 rounded-md text-sm font-medium transition duration-150">Quick Sort</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Header Section -->
+    <header class="text-center mb-12 mt-16">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight">
+            <span class="text-gradient">Quick Sort:</span> The Partitioning D&C Algorithm
+        </h1>
+        <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+            Optimized for speed in the average case, often implemented as an in-place sort.
+        </p>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto">
+
+        <!-- Overview Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-red-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 17 5-5-5-5"></path><path d="m9 17-5-5 5-5"></path></svg>
+                Overview and In-Place Sorting
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                Quick Sort is an extremely popular sorting algorithm. While it adheres to the Divide and Conquer principle, the heavy lifting happens in the Divide (Partition) phase, unlike Merge Sort where the work is in the Merge phase. It is generally considered faster in practice than Merge Sort due to better constant factors and is often implemented in-place, meaning it requires minimal additional memory (O(\log n) for the recursion stack, not O(n) like Merge Sort).
+            </p>
+        </section>
+        
+        <!-- The D&C Steps in Quick Sort -->
+        <section id="algorithm-steps" class="mb-16">
+            <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">
+                The Quick Sort Process
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Step 1: Divide (Partition) -->
+                <div class="card-shadow bg-white rounded-xl p-8 border-t-4 border-blue-500">
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">1. Divide (Partitioning)</h3>
+                    <p class="text-gray-600">
+                        Select a <b>pivot</b> element. Rearrange the array so all elements less than the pivot are to its left, and all elements greater are to its right. The pivot is now in its final sorted position.
+                    </p>
+                </div>
+
+                <!-- Step 2: Conquer -->
+                <div class="card-shadow bg-white rounded-xl p-8 border-t-4 border-green-500">
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">2. Conquer</h3>
+                    <p class="text-gray-600">
+                        Recursively call Quick Sort on the sub-array of elements to the left of the pivot and the sub-array of elements to the right of the pivot. The <b>base case </b> is an array of size 0 or 1.
+                    </p>
+                </div>
+
+                <!-- Step 3: Combine -->
+                <div class="card-shadow bg-white rounded-xl p-8 border-t-4 border-red-500">
+                    <h3 class="text-2xl font-semibold mb-3 text-gray-900">3. Combine (Trivial)</h3>
+                    <p class="text-gray-600">
+                        The Combine step is trivial. Since the partitioning places the pivot correctly and the sub-arrays are sorted in place, the entire array becomes sorted automatically once the recursive calls complete.
+                    </p>
+                </div>
+            </div>
+            
+        </section>
+
+        <!-- Visualizing Quick Sort Section (Bootstrap Carousel) -->
+        <section class="mb-16 p-6 md:p-10 bg-red-50 rounded-xl shadow-lg border-t-4 border-red-300">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Visualizing the Partition
+            </h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Unlike Merge Sort, the key operation in Quick Sort is the partition step. The goal is to select a pivot and move all smaller elements to its left and larger elements to its right.
+            </p>
+            
+            <!-- Bootstrap Carousel -->
+            <div id="quickSortCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#quickSortCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#quickSortCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#quickSortCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#quickSortCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#quickSortCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                </div>
+                <div class="carousel-inner rounded-lg shadow-lg">
+                    <!-- Slide 1: Select Pivot -->
+                    <div class="carousel-item active">
+                        <img src="image/q1.png" class="d-block w-100" alt="Select Pivot Step">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h5>Step 1: Select a Pivot</h5>
+                            <p>An element is chosen from the array to be the "pivot." Here, we choose the last element, 47.</p>
+                        --></div> 
+                    </div>
+                    <!-- Slide 2: Partitioning -->
+                    <div class="carousel-item">
+                        <img src="image/q2.png" class="d-block w-100" alt="Partitioning Step">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h5>Step 2: Partitioning</h5>
+                            <p>Rearrange the array so that all elements smaller than the pivot are on its left, and all elements larger are on its right.</p>
+                        --> </div>
+                    </div>
+                    <!-- Slide 3: Pivot in Place -->
+                    <div class="carousel-item">
+                        <img src="image/q3.png" class="d-block w-100" alt="Pivot in Final Place">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h5>Step 3: Pivot in Final Position</h5>
+                            <p>After partitioning, the pivot (47) is now in its final, sorted position. It will not be moved again.</p>
+                       --> </div> 
+                    </div>
+                    <!-- Slide 4: Recurse Left -->
+                    <div class="carousel-item">
+                        <img src="image/q4.png" class="d-block w-100" alt="Recurse Left Sub-array">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h5>Step 4: Recurse on Left Sub-array</h5>
+                            <p>The entire Quick Sort algorithm is recursively called on the new, smaller sub-array to the left of the pivot.</p> -->
+                        </div>
+                    </div>
+                    <!-- Slide 5: Recurse Right -->
+                    <div class="carousel-item">
+                        <img src="image/q5.png" class="d-block w-100" alt="Recurse Right Sub-array">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h5>Step 5: Recurse on Right Sub-array</h5>
+                            <p>The algorithm is also recursively called on the sub-array to the right of the pivot. This continues until all elements are sorted.</p>
+                        --></div> 
+                    </div>
+                    <div class="carousel-item">
+                        <img src="image/q6.png" class="d-block w-100" alt="Recurse Right Sub-array">
+                        <div class="carousel-caption d-none d-md-block">
+                            <!-- <h5>Step 5: Recurse on Right Sub-array</h5>
+                            <p>The algorithm is also recursively called on the sub-array to the right of the pivot. This continues until all elements are sorted.</p>
+                       --> </div> 
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#quickSortCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#quickSortCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Complexity Section -->
+        <section class="mb-16 p-6 md:p-10 bg-gray-800 rounded-xl text-white shadow-xl">
+            <h2 class="text-3xl font-bold mb-6 text-yellow-400 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4"></path><path d="M18 10l-6-6-6 6"></path><path d="M18 16l-6 6-6-6"></path></svg>
+                Complexity Analysis
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Time Complexity -->
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-2 text-white">Time Complexity</h3>
+                    <ul class="list-disc list-inside text-gray-300 ml-4">
+                        <li><b>Average Case: </b>O(n \log n) - Achieved with good pivot selection.</li>
+                        <li><b>Worst Case:</b> O(n^2) - Occurs when the pivot is always the smallest or largest element, leading to unbalanced partitions.</li>
+                        <li><b>Best Case:</b> O(n \log n) - Occurs when the pivot is always the median.</li>
+                    </ul>
+                </div>
+
+                <!-- Space Complexity -->
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-2 text-white">Space Complexity: O(\log n)</h3>
+                    <p class="text-gray-300">
+                        Quick Sort is an <b>in-place algorithm</b> (only requiring a constant amount of extra memory for variable storage). However, the recursive function calls require space on the call stack, resulting in O(\log n) space complexity in the average case and potentially O(n) in the worst-case (unbalanced partitions).
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Advantages Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-green-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path></svg>
+                Advantages of Quick Sort
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li>It is a divide-and-conquer algorithm that makes it easier to solve problems.</li>
+                <li>It is efficient on large data sets.</li>
+                <li>It has a low overhead, as it only requires a small amount of memory to function.</li>
+                <li>It is Cache Friendly as we work on the same array to sort and do not copy data to any auxiliary array.</li>
+                <li>Fastest general purpose algorithm for large data when stability is not required.</li>
+                <li>It is tail recursive and hence all the tail call optimization can be done.</li>
+            </ul>
+        </section>
+
+        <!-- Disadvantages Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-yellow-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                Disadvantages of Quick Sort
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li>It has a worst-case time complexity of O(n^2), which occurs when the pivot is chosen poorly.</li>
+                <li>It is not a good choice for small data sets.</li>
+                <li>It is not a stable sort, meaning that if two elements have the same key, their relative order will not be preserved in the sorted output.</li>
+            </ul>
+        </section>
+        
+        <!-- Applications Section -->
+        <section class="mb-16 p-6 md:p-10 bg-white rounded-xl shadow-lg card-shadow border-l-4 border-blue-500">
+            <h2 class="text-3xl font-bold mb-4 text-gray-800 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"></path><path d="M8 16h.01"></path><path d="M12 12h.01"></path><path d="M16 16h.01"></path><path d="M12 8h.01"></path><path d="M12 20h.01"></path></svg>
+                Applications of Quick Sort
+            </h2>
+            <ul class="text-lg text-gray-700 leading-relaxed content-list">
+                <li>Sorting large datasets efficiently in memory.</li>
+                <li>Used in library sort functions (like C++ std::sort and Java Arrays.sort for primitives).</li>
+                <li>Arranging records in databases for faster searching.</li>
+                <li>Preprocessing step in algorithms requiring sorted input (e.g., binary search, two-pointer techniques).</li>
+                <li>Finding the kth smallest/largest element using Quickselect (a variant of quicksort).</li>
+                <li>Sorting arrays of objects based on multiple keys (custom comparators).</li>
+                <li>Data compression algorithms (like Huffman coding preprocessing).</li>
+                <li>Graphics and computational geometry (e.g., convex hull algorithms).</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center mt-12 py-4 border-t border-gray-200 text-gray-500">
+        <p>Algorithm Analysis & Design | Divide and Conquer Paradigm</p>
+    </footer>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
